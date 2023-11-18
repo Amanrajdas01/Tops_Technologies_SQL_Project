@@ -1,0 +1,61 @@
+
+                                                                Section-C
+
+
+1.	Given a sales table, write a SQL query to list the top 3 best-selling products in the last month.
+
+Query:-   SELECT product_id, SUM(quantity_sold) as total_quantity_sold
+          FROM sales
+          WHERE sale_date >= DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH)
+          GROUP BY product_id
+          ORDER BY total_quantity_sold DESC
+          LIMIT 3;
+
+2.Describe the SQL process you would use to normalize a table with redundant data.
+Ans:- General process you can follow to normalize a table with redundant data:
+
+a. Identify the Primary Key
+b. Identify Functional Dependencies
+c. Create Separate Tables
+d. Define Relationships
+e. Ensure First Normal Form (1NF):Ensure that each table is in 1NF , meaning that it has a primary key, and all columns contain atomic values (indivisible and not repeating groups).
+f. Ensure Second Normal Form (2NF):
+g. Ensure that each table is in 2NF, which means it is in 1NF and no non-prime attribute (non-key attribute) is dependent on only a portion of the primary key.
+h. Ensure Third Normal Form (3NF):Ensure that each table is in 3NF, which means it is in 2NF, and no non-prime attribute is transitively dependent on the primary key.
+i.Normalize Further if Necessary:Depending on the complexity of the data and the specific requirements, you may need to normalize further, achieving higher normal forms (e.g., Boyce-Codd Normal Form - BCNF or Fourth Normal Form - 4NF).
+j.Consider Denormalization (if needed):In some cases, denormalization may be considered for performance optimization, but it should be done carefully and with a clear understanding of the trade-offs.
+k. Test and Refine:Test the new database design with sample data to ensure that it meets the desired criteria of normalization and provides efficient data retrieval. Refine the design as needed.
+
+
+3. How would you write a SQL statement to merge data from two tables orders and products, where each order includes the product name, not just the ID?
+Ans:- SELECT orders.order_id, orders.customer_id, products.product_name, orders.quantity, orders.order_date
+      FROM orders
+      INNER JOIN products ON orders.product_id = products.product_id;
+
+4.If you wanted to provide a roll-up report of sales by quarter and by region, which SQL clause would you use?
+Ans:-To provide a roll-up report of sales by quarter and by region, we would use the GROUP BY clause in SQL. Additionally, we might use the ROLLUP modifier      to generate subtotals for each level of aggregation.
+
+    SELECT
+    YEAR(order_date) AS sales_year,
+    QUARTER(order_date) AS sales_quarter,
+    region,
+    SUM(sales_amount) AS total_sales
+    FROM
+    sales
+    GROUP BY
+    ROLLUP (sales_year, sales_quarter, region);
+note:- ROLLUP is used in the GROUP BY clause to generate subtotals for the specified columns (sales_year, sales_quarter, and region).
+
+
+5.Imagine you have a database that is running slow. What SQL commands might you use to diagnose and fix the performance issues?
+Ans:-
+a. Identify Slow Queries:use query logs or profiling tools to identify queries with long execution times or frequent occurrences.
+
+b. Analyze Execution Plans:Utilize the EXPLAIN command to review and analyze the execution plans of slow queries for potential bottlenecks.
+Query:-EXPLAIN SELECT * FROM your_table WHERE your_condition;
+
+
+c. Optimize Indexing:Check and create indexes on columns involved in slow queries using SHOW INDEX and update statistics with ANALYZE TABLE.
+ANALYZE TABLE your_table;
+SHOW INDEX FROM your_table;
+
